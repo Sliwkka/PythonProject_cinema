@@ -1,17 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Potwierdzenie rezerwacji</title>
-</head>
-<body>
-    <h1>Rezerwacja potwierdzona! ✅</h1>
-    <p>Twoja rezerwacja na seans <strong>{{ screening.movie.title }}</strong> została złożona.</p>
-    <p>Data: {{ screening.date }}</p>
-    <p>Godzina: {{ screening.time }}</p>
-    <p>Sala: {{ screening.hall }}</p>
+{% extends 'reservations/base.html' %}
 
-    <br>
-    <a href="{% url 'screening_list' %}">Wróć do repertuaru</a>
-
-</body>
-</html>
+{% block content %}
+    <div class="text-center mt-5">
+        <h1 class="text-success">Rezerwacja potwierdzona! ✅</h1>
+        <div class="card w-50 mx-auto mt-4">
+            <div class="card-body">
+                <h5 class="card-title">{{ screening.movie.title }}</h5>
+                <p class="card-text"><strong>📅 Data:</strong> {{ screening.date }}</p>
+                <p class="card-text"><strong>🕐 Godzina:</strong> {{ screening.time }}</p>
+                <p class="card-text"><strong>🎭 Sala:</strong> {{ screening.hall }}</p>
+            </div>
+        </div>
+        <a href="{% url 'movie_list' %}" class="btn btn-danger mt-4">Wróć do filmów</a>
+    </div>
+{% endblock %}

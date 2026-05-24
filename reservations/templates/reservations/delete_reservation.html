@@ -1,0 +1,24 @@
+{% extends 'reservations/base.html' %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card text-center">
+                <div class="card-body p-5">
+                    <h2 class="text-white fw-bold mb-4">Usuń rezerwację</h2>
+                    <p class="text-white mb-2">Czy na pewno chcesz usunąć rezerwację na:</p>
+                    <h4 class="text-danger mb-2">{{ reservation.screening.movie.title }}</h4>
+                    <p class="text-white">📅 {{ reservation.screening.date }} o 🕐 {{ reservation.screening.time }}</p>
+                    <p class="text-white">💺 Liczba miejsc: {{ reservation.seats }}</p>
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        <form method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Tak, usuń</button>
+                        </form>
+                        <a href="{% url 'my_reservations' %}" class="btn btn-secondary">Anuluj</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

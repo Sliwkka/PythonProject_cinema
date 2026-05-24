@@ -1,43 +1,41 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Repertuar kina</title>
-</head>
-<body>
-    <nav>
-        {% if request.user.is_authenticated %}
-            <span>Cześć, {{ request.user.username }}!</span>
-            <a href="{% url 'my_reservations' %}">Moje rezerwacje</a>
-            <a href="{% url 'logout' %}">Wyloguj</a>
-        {% else %}
-            <a href="{% url 'login' %}">Zaloguj się</a>
-            <a href="{% url 'register' %}">Zarejestruj się</a>
-        {% endif %}
-    </nav>
+{% extends 'reservations/base.html' %}
 
-    <hr>
+{% block content %}
+    <h2 class="mb-4 text-center fw-bold">Najbliższe seanse</h2>
 
-    <h1>Repertuar kina</h1>
-
-    <form method="get">
-        <input type="text" name="movie" placeholder="Szukaj filmu..." value="{{ request.GET.movie }}">
-        <input type="date" name="date" value="{{ request.GET.date }}">
-        <button type="submit">Szukaj</button>
+    <form method="get" class="row g-3 mb-5 justify-content-center">
+        <div class="col-md-4">
+            <input type="text" name="movie" class="form-control form-control-lg" placeholder="🔍 Szukaj filmu..." value="{{ request.GET.movie }}">
+        </div>
+        <div class="col-md-3">
+            <input type="date" name="date" class="form-control form-control-lg" value="{{ request.GET.date }}">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-danger btn-lg w-100">Szukaj</button>
+        </div>
     </form>
 
-    <hr>
-
-    {% for screening in screenings %}
-        <div>
-            <h2>{{ screening.movie.title }}</h2>
-            <p>Data: {{ screening.date }}</p>
-            <p>Godzina: {{ screening.time }}</p>
-            <p>Sala: {{ screening.hall }}</p>
-            <p>Wolne miejsca: {{ screening.available_seats }}</p>
-            <a href="{% url 'screening_detail' screening.pk %}">Zarezerwuj</a>
-        </div>
-        <hr>
-    {% endfor %}
-
-</body>
-</html>
+    <div class="row">
+        {% for screening in screenings %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if screening.movie.poster %}
+                        <img src="{{ screening.movie.poster.url }}" class="card-img-top" style="height: 350px; object-fit: cover; border-radius: 15px 15px 0 0;">
+                    {% else %}
+                        <div style="height: 350px; background: linear-gradient(135deg, #1a1a2e, #e63946); border-radius: 15px 15px 0 0; display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 5rem;">🎬</span>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">{{ screening.movie.title }}</h5>
+                        <p class="card-text"><strong>📅 Data:</strong> {{ screening.date }}</p>
+                        <p class="card-text"><strong>🕐 Godzina:</strong> {{ screening.time }}</p>
+                        <p class="card-text"><strong>🎭 Sala:</strong> {{ screening.hall }}</p>
+                        <p class="card-text"><strong>💺 Wolne miejsca:</strong> {{ screening.available_seats }}</p>
+                        <a href="{% url 'screening_detail' screening.pk %}" class="btn btn-danger w-100">Zarezerwuj</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

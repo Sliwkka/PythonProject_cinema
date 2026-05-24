@@ -1,28 +1,34 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Moje rezerwacje</title>
-</head>
-<body>
-    <h1>Moje rezerwacje</h1>
+{% extends 'reservations/base.html' %}
+
+{% block content %}
+    <h1 class="mb-4 text-white fw-bold">Moje rezerwacje</h1>
+
+    <form method="get" class="d-flex flex-row align-items-center gap-2 mb-4">
+        <input type="text" name="movie" class="form-control" style="max-width: 300px;" placeholder="🔍 Szukaj po filmie..." value="{{ request.GET.movie }}">
+        <button type="submit" class="btn btn-danger">Filtruj</button>
+        <a href="{% url 'my_reservations' %}" class="btn btn-secondary">Wyczyść</a>
+    </form>
 
     {% if reservations %}
-        {% for reservation in reservations %}
-            <div>
-                <h2>{{ reservation.screening.movie.title }}</h2>
-                <p>Data: {{ reservation.screening.date }}</p>
-                <p>Godzina: {{ reservation.screening.time }}</p>
-                <p>Sala: {{ reservation.screening.hall }}</p>
-                <p>Liczba miejsc: {{ reservation.seats }}</p>
-            </div>
-            <hr>
-        {% endfor %}
+        <div class="row">
+            {% for reservation in reservations %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-white">{{ reservation.screening.movie.title }}</h5>
+                            <p class="card-text"><strong>📅 Data:</strong> {{ reservation.screening.date }}</p>
+                            <p class="card-text"><strong>🕐 Godzina:</strong> {{ reservation.screening.time }}</p>
+                            <p class="card-text"><strong>🎭 Sala:</strong> {{ reservation.screening.hall }}</p>
+                            <p class="card-text"><strong>💺 Liczba miejsc:</strong> {{ reservation.seats }}</p>
+                            <a href="{% url 'delete_reservation' reservation.pk %}" class="btn btn-danger w-100 mt-2">Usuń rezerwację</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     {% else %}
-        <p>Nie masz jeszcze żadnych rezerwacji.</p>
+        <p class="text-white">Nie masz jeszcze żadnych rezerwacji.</p>
     {% endif %}
 
-    <br>
-    <a href="{% url 'screening_list' %}">Wróć do repertuaru</a>
-
-</body>
-</html>
+    <a href="{% url 'movie_list' %}" class="btn btn-secondary mt-2">Wróć do filmów</a>
+{% endblock %}

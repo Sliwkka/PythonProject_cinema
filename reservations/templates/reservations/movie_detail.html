@@ -1,0 +1,47 @@
+{% extends 'reservations/base.html' %}
+
+{% block content %}
+    <div class="row mb-5">
+        <div class="col-md-4">
+            {% if movie.poster %}
+                <img src="{{ movie.poster.url }}" class="img-fluid rounded shadow" style="max-height: 500px; object-fit: cover;">
+            {% else %}
+                <div style="height: 500px; background: linear-gradient(135deg, #1a1a2e, #e63946); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 5rem;">🎬</span>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <h1 class="fw-bold text-white">{{ movie.title }}</h1>
+            <p class="lead text-white">{{ movie.description }}</p>
+        </div>
+    </div>
+
+    <h2 class="mb-4 fw-bold text-white">Dostępne seanse</h2>
+
+    <form method="get" class="d-flex flex-row align-items-center gap-2 mb-4">
+        <input type="date" name="date" class="form-control" style="max-width: 250px;" value="{{ request.GET.date }}">
+        <button type="submit" class="btn btn-danger">Filtruj</button>
+        <a href="{% url 'movie_detail' movie.pk %}" class="btn btn-secondary">Wyczyść</a>
+    </form>
+
+    <div class="row">
+        {% for screening in screenings %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <p class="card-text"><strong>📅 Data:</strong> {{ screening.date }}</p>
+                        <p class="card-text"><strong>🕐 Godzina:</strong> {{ screening.time }}</p>
+                        <p class="card-text"><strong>🎭 Sala:</strong> {{ screening.hall }}</p>
+                        <p class="card-text"><strong>💺 Wolne miejsca:</strong> {{ screening.available_seats }}</p>
+                        <a href="{% url 'screening_detail' screening.pk %}" class="btn btn-danger w-100">Zarezerwuj</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-white">Brak seansów dla wybranej daty.</p>
+        {% endfor %}
+    </div>
+
+    <a href="{% url 'movie_list' %}" class="btn btn-secondary mt-2">Wróć do filmów</a>
+{% endblock %}

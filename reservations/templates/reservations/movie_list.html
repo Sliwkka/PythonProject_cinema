@@ -1,0 +1,31 @@
+{% extends 'reservations/base.html' %}
+
+{% block content %}
+    <h2 class="mb-4 text-center fw-bold text-white">Filmy w repertuarze</h2>
+
+    <form method="get" class="d-flex justify-content-center mb-5 gap-2">
+        <input type="text" name="title" class="form-control form-control-lg" style="max-width: 400px;" placeholder="🔍 Szukaj filmu..." value="{{ request.GET.title }}">
+        <button type="submit" class="btn btn-danger btn-lg">Szukaj</button>
+    </form>
+
+    <div class="row">
+        {% for movie in movies %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if movie.poster %}
+                        <img src="{{ movie.poster.url }}" class="card-img-top" style="height: 350px; object-fit: cover; border-radius: 15px 15px 0 0;">
+                    {% else %}
+                        <div style="height: 350px; background: linear-gradient(135deg, #1a1a2e, #e63946); border-radius: 15px 15px 0 0; display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 5rem;">🎬</span>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold text-white">{{ movie.title }}</h5>
+                        <p class="card-text" style="color: #ffffff;">{{ movie.description|truncatewords:20 }}</p>
+                        <a href="{% url 'movie_detail' movie.pk %}" class="btn btn-danger w-100">Zobacz seanse</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

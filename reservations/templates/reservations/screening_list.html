@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Repertuar kina</title>
+</head>
+<body>
+    <h1>Repertuar kina</h1>
+
+    <form method="get">
+        <input type="text" name="movie" placeholder="Szukaj filmu..." value="{{ request.GET.movie }}">
+        <input type="date" name="date" value="{{ request.GET.date }}">
+        <button type="submit">Szukaj</button>
+    </form>
+
+    <hr>
+
+    {% for screening in screenings %}
+        <div>
+            <h2>{{ screening.movie.title }}</h2>
+            <p>Data: {{ screening.date }}</p>
+            <p>Godzina: {{ screening.time }}</p>
+            <p>Sala: {{ screening.hall }}</p>
+            <p>Wolne miejsca: {{ screening.available_seats }}</p>
+            <a href="{% url 'screening_detail' screening.pk %}">Zarezerwuj</a>
+        </div>
+        <hr>
+    {% endfor %}
+
+</body>
+</html>

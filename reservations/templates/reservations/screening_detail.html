@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ screening.movie.title }}</title>
+</head>
+<body>
+    <h1>{{ screening.movie.title }}</h1>
+    <p>Data: {{ screening.date }}</p>
+    <p>Godzina: {{ screening.time }}</p>
+    <p>Sala: {{ screening.hall }}</p>
+    <p>Wolne miejsca: {{ screening.available_seats }}</p>
+    <p>{{ screening.movie.description }}</p>
+
+    <h2>Rezerwacja</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label>Imię i nazwisko:</label>
+        <input type="text" name="name" required>
+        <br>
+        <label>Email:</label>
+        <input type="email" name="email" required>
+        <br>
+        <label>Liczba miejsc:</label>
+        <input type="number" name="seats" min="1" max="{{ screening.available_seats }}" required>
+        <br>
+        <button type="submit">Zarezerwuj</button>
+    </form>
+
+    <br>
+    <a href="{% url 'screening_list' %}">Wróć do repertuaru</a>
+
+</body>
+</html>

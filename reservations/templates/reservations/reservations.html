@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Potwierdzenie rezerwacji</title>
+</head>
+<body>
+    <h1>Rezerwacja potwierdzona! ✅</h1>
+    <p>Twoja rezerwacja na seans <strong>{{ screening.movie.title }}</strong> została złożona.</p>
+    <p>Data: {{ screening.date }}</p>
+    <p>Godzina: {{ screening.time }}</p>
+    <p>Sala: {{ screening.hall }}</p>
+
+    <br>
+    <a href="{% url 'screening_list' %}">Wróć do repertuaru</a>
+
+</body>
+</html>

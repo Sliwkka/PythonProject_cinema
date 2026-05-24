@@ -4,6 +4,19 @@
     <title>Repertuar kina</title>
 </head>
 <body>
+    <nav>
+        {% if request.user.is_authenticated %}
+            <span>Cześć, {{ request.user.username }}!</span>
+            <a href="{% url 'my_reservations' %}">Moje rezerwacje</a>
+            <a href="{% url 'logout' %}">Wyloguj</a>
+        {% else %}
+            <a href="{% url 'login' %}">Zaloguj się</a>
+            <a href="{% url 'register' %}">Zarejestruj się</a>
+        {% endif %}
+    </nav>
+
+    <hr>
+
     <h1>Repertuar kina</h1>
 
     <form method="get">

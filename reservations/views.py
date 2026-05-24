@@ -1,7 +1,7 @@
-from django.shortcuts import render
-
-# Create your views here.
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.decorators import login_required
 from .models import Screening, Reservation
 
 
@@ -30,6 +30,7 @@ def screening_detail(request, pk):
 
         Reservation.objects.create(
             screening=screening,
+            user=request.user if request.user.is_authenticated else None,
             name=name,
             email=email,
             seats=seats
@@ -41,3 +42,40 @@ def screening_detail(request, pk):
         return render(request, 'reservations/reservations.html', {'screening': screening})
 
     return render(request, 'reservations/screening_detail.html', {'screening': screening})
+
+
+def register_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('screening_list')
+    else:
+        form = UserCreationForm()
+
+    return render(request, 'reservations/registration.html', {'form': form})
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('screening_list')
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'reservations/login.html', {'form': form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('screening_list')
+
+
+@login_required
+def my_reservations(request):
+    reservations = Reservation.objects.filter(user=request.user)
+    return render(request, 'reservations/my_reservations.html', {'reservations': reservations})

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Moje rezerwacje</title>
+</head>
+<body>
+    <h1>Moje rezerwacje</h1>
+
+    {% if reservations %}
+        {% for reservation in reservations %}
+            <div>
+                <h2>{{ reservation.screening.movie.title }}</h2>
+                <p>Data: {{ reservation.screening.date }}</p>
+                <p>Godzina: {{ reservation.screening.time }}</p>
+                <p>Sala: {{ reservation.screening.hall }}</p>
+                <p>Liczba miejsc: {{ reservation.seats }}</p>
+            </div>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>Nie masz jeszcze żadnych rezerwacji.</p>
+    {% endif %}
+
+    <br>
+    <a href="{% url 'screening_list' %}">Wróć do repertuaru</a>
+
+</body>
+</html>
